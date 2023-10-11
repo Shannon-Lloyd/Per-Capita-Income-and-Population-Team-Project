@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Income Choropleth</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+
+    <!-- <Leaflet JavaScript code--> 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+
+    <!-- D3 library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <!-- Chart.JS Library-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <!-- Our CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"> 
+
+  </head>
+  <body>
+
+    <!-- The div where we'll insert our maps -->
+    <div class="grid-container ">
+      <div class="map-child income">
+        <h2>Map of Income per Capita for Texas Counties</h2>
+        <div id="income"></div>
+      </div>
+
+      <div class="map-child right">
+        <h2>Map of Population Values for Texas Counties</h2>
+        <div id="population"></div>
+      </div>
+    </div>
+
+    <!-- The div where we'll insert our chart and dropdown menu -->
+    <div class = "grid-container">
+        <div class = "chart-child">
+            <h2>Population vs Income in Texas Counties Chart</h2>
+            <canvas id="Project 3" width="600" height="285"></canvas>
+            <script type="text/javascript" src="{{url_for('static', filename='js/data.js')}}"></script>
+            <script type="text/javascript" src="{{url_for('static', filename= 'js/chart-script.js')}}"></script>
+        </div>
+    
+
+        <div class = "menu-child">
+        {% if initial %} 
+        <h2>Choose a County</h2>
+        <form action="{{ url_for('index')}}" method="POST">
+          <SELECT name="county">      
+            {% for c in countyList %}
+                <OPTION value={{c.County}}>{{c.County}}</option>
+            {% endfor %}
+          </SELECT>
+        <button type="submit">Show selected County Data</button>
+        </form>
+        {% endif %}
+        <br><br>
+        {% if initial == False%}       
+          <h2>The Per Capita Income for {{countyList[0]}} is {{countyList[1]}}</h2>
+          <hr><h2>The Population of {{countyList[0]}} is {{countyList[2]}}</h2>
+          <a href="{{ url_for('index')}}" class="button">Select another city</a>
+
+        {% endif %}
+        </div>
+    </div>
+
+    <!-- Our JavaScript -->
+    <script type="text/javascript" src="{{url_for('static', filename='js/data.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/Choropleth.js')}}"></script>
+  
+  </body>
+</html>
